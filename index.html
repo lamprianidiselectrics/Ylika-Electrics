@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical Pro 2026 - Final Fix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        input[type="checkbox"]:checked + span { background-color: #2563eb; color: white; border-color: #2563eb; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        #pdf-container { position: absolute; left: -9999px; top: 0; background: white; width: 210mm; padding: 20mm; color: black; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+        .hidden-item { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-slate-900">
+
+    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex flex-wrap justify-between items-center gap-2">
+            <h1 class="text-lg font-bold tracking-tighter">⚡ ELECTRICAL PRO v11</h1>
+            <div class="flex flex-wrap gap-2">
+                <button onclick="resetAll()" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-xs font-bold">🗑️ ΚΑΘΑΡΙΣΜΟΣ</button>
+                <button onclick="saveToFile()" class="bg-green-600 hover:bg-green-700 px-3 py-2 rounded-lg text-xs font-bold">💾 ΑΠΟΘΗΚΕΥΣΗ</button>
+                <button onclick="document.getElementById('fileInput').click()" class="bg-orange-500 hover:bg-orange-600 px-3 py-2 rounded-lg text-xs font-bold">📂 ΦΟΡΤΩΣΗ</button>
+                <input type="file" id="fileInput" class="hidden" accept=".json" onchange="loadFromFile(event)">
+                <button onclick="exportToPDF()" class="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg text-xs font-bold">📄 PDF</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 pb-48">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Όνομα Έργου</label>
+                <input type="text" id="projectName" oninput="saveToLocal()" placeholder="Εισάγετε όνομα έργου..." class="w-full text-xl font-bold outline-none">
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Έκπτωση (%)</label>
+                <input type="number" id="globalDiscount" value="0" oninput="saveToLocal(); calculateTotals()" class="w-full text-xl font-bold text-red-600 outline-none">
+            </div>
+        </div>
+
+        <div class="mb-6 relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
+            <input type="text" id="searchInput" oninput="filterItems()" placeholder="Αναζήτηση υλικού..." class="w-full p-3 pl-10 rounded-xl border border-gray-200 shadow-sm outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="appContent"></div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-5 border-t shadow-lg z-40">
+        <div class="container mx-auto grid grid-cols-2 gap-4">
+            <div><div class="text-gray-400 text-[10px] uppercase font-bold">Αρχικό Σύνολο</div><div id="subTotal" class="text-xl font-bold text-gray-600">0.00 €</div></div>
+            <div class="text-right"><div class="text-blue-500 text-[10px] uppercase font-bold">Τελικό</div><div id="grandTotal" class="text-3xl font-black text-blue-700">0.00 €</div></div>
+        </div>
+    </footer>
+
+    <div id="pdf-container">
+        <h1 style="text-align:center">ΠΡΟΣΦΟΡΑ ΥΛΙΚΩΝ</h1>
+        <div id="pdf-header" style="margin-bottom:20px"></div>
+        <table>
+            <thead><tr><th>Περιγραφή</th><th>Ποσότητα</th><th>Τιμή Μον.</th><th>Σύνολο</th></tr></thead>
+            <tbody id="pdf-body"></tbody>
+        </table>
+        <div id="pdf-footer" style="text-align:right; margin-top:20px; font-size:18px; font-weight:bold"></div>
+    </div>
+
+    <script>
+        // Η αρχική δομή δεδομένων
+        let state = {
+            projectName: "",
+            discount: 0,
+            categories: [
+                {
+                    name: "Καλώδια",
+                    subs: [
+                        { name: "Πολύκλονα 2x & 3x", hasColor: false, items: [{n:"2x1", p:0.59}, {n:"2x1.5", p:0.85}, {n:"3x1.5", p:1.05}, {n:"3x2.5", p:1.65}, {n:"3x4", p:2.60}, {n:"3x6", p:3.80}] },
+                        { name: "Πολύκλονα 5x", hasColor: false, items: [{n:"5x1.5", p:1.75}, {n:"5x2.5", p:2.75}, {n:"5x4", p:4.20}, {n:"5x6", p:6.10}] },
+                        { name: "Μονόκλωνα (H07V-U)", hasColor: true, items: [{n:"1x1.5mm", p:0.28}, {n:"1x2.5mm", p:0.46}, {n:"1x4mm", p:0.74}, {n:"1x6mm", p:1.10}] },
+                        { name: "Άλλα Καλώδια", hasColor: false, items: [{n:"Καλώδιο TV", p:0.60}, {n:"UTP CAT6", p:0.70}] }
+                    ]
+                },
+                {
+                    name: "Σωλήνες & Κανάλια",
+                    subs: [
+                        { name: "Σπιράλ", hasColor: false, items: [{n:"Φ16 Ελαφρύ", p:0.35}, {n:"Φ16 Βαρύ", p:0.65}, {n:"Φ20 Ελαφρύ", p:0.45}, {n:"Φ20 Βαρύ", p:0.85}] },
+                        { name: "Σωλήνα Ευθεία", hasColor: false, items: [{n:"Φ16 Ευθεία", p:3.40}, {n:"Φ20 Ευθεία", p:4.10}, {n:"Φ25 Ευθεία", p:6.00}] },
+                        { name: "Μούφες&Κολάρα", hasColor: false, items: [{n:"Φ16 Μούφα", p:0.20}, {n:"Φ16 Κολάρο", p:0.20}, {n:"Φ20 Μούφα", p:0.20}] },
+                        { name: "Κανάλια Λευκά", hasColor: false, items: [{n:"12x12", p:0.95}, {n:"16x16", p:1.15}, {n:"20x13", p:3.60}] }
+                    ]
+                },
+                {
+                    name: "Πίνακες & Υλικό Ράγας",
+                    subs: [
+                        { name: "Πίνακες", hasColor: false, items: [{n:"Πίνακας 12 Στοιχ.", p:18.00}, {n:"Πίνακας 24 Στοιχ.", p:32.00}] },
+                        { name: "Ασφάλειες", hasColor: false, items: [{n:"10A", p:3.80}, {n:"16A", p:3.80}, {n:"20A", p:3.90}, {n:"25A", p:4.10}] },
+                        { name: "Ρελέ Διαρροής", hasColor: false, items: [{n:"40A/30mA AC", p:38.00}, {n:"63A/30mA AC", p:66.40}] }
+                    ]
+                },
+                {
+                    name: "Πριζοδιακοπτικό",
+                    subs: [
+                        { name: "Διακόπτες", hasColor: false, items: [{n:"Απλός", p:2.50}, {n:"Κομμυτατέρ", p:3.50}, {n:"Αλλέ-Ρετούρ", p:3.00}] },
+                        { name: "Πρίζες", hasColor: false, items: [{n:"Σούκο Απλή", p:2.40}, {n:"Ethernet", p:14.00}] }
+                    ]
+                }
+            ]
+        };
+
+        // Αρχικοποίηση
+        function init() {
+            const saved = localStorage.getItem('elec_state_v11');
+            if (saved) {
+                state = JSON.parse(saved);
+            }
+            renderApp();
+        }
+
+        function renderApp() {
+            document.getElementById('projectName').value = state.projectName || "";
+            document.getElementById('globalDiscount').value = state.discount || 0;
+            
+            const container = document.getElementById('appContent');
+            container.innerHTML = '';
+
+            state.categories.forEach((cat, catIdx) => {
+                let catHtml = `
+                    <div class="cat-card bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                        <div class="bg-slate-50 p-3 border-b border-gray-100"><h2 class="font-black text-slate-600 text-xs uppercase">${cat.name}</h2></div>
+                        <div class="p-4">`;
+
+                cat.subs.forEach((sub, subIdx) => {
+                    catHtml += `
+                        <div class="mb-6 last:mb-0">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-[10px] font-bold text-blue-500 uppercase">${sub.name}</h3>
+                                <button onclick="addItem(${catIdx}, ${subIdx})" class="text-[9px] bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold hover:bg-blue-100">+ ΥΛΙΚΟ</button>
+                            </div>
+                            <div class="space-y-3">`;
+
+                    sub.items.forEach((item, itemIdx) => {
+                        catHtml += `
+                            <div class="item-row bg-gray-50/50 p-2 rounded-lg border border-transparent hover:border-blue-100 transition-all" data-name="${item.n.toLowerCase()}">
+                                <div class="flex items-center gap-2">
+                                    <input type="text" value="${item.n}" oninput="updateItem(${catIdx},${subIdx},${itemIdx},'n',this.value)" class="flex-grow text-sm font-medium bg-transparent outline-none">
+                                    <input type="number" step="0.01" value="${item.p}" oninput="updateItem(${catIdx},${subIdx},${itemIdx},'p',this.value)" class="w-14 text-xs border rounded p-1 text-right">
+                                    <div class="flex items-center bg-white border border-blue-200 rounded">
+                                        <button onclick="changeQty(${catIdx},${subIdx},${itemIdx},-1)" class="px-2 py-1 text-blue-600 font-bold">-</button>
+                                        <input type="number" value="${item.q || 0}" 
+                                            onfocus="if(this.value=='0')this.value=''" 
+                                            onblur="if(this.value=='')this.value='0'"
+                                            oninput="updateItem(${catIdx},${subIdx},${itemIdx},'q',this.value)" 
+                                            class="w-10 text-xs text-center font-bold outline-none">
+                                        <button onclick="changeQty(${catIdx},${subIdx},${itemIdx},1)" class="px-2 py-1 text-blue-600 font-bold">+</button>
+                                    </div>
+                                </div>
+                                ${sub.hasColor ? `
+                                <div class="flex gap-1 mt-2">
+                                    ${['Καφέ','Μπλε','Μαυρο','Κ/Π'].map(c => `
+                                        <label class="cursor-pointer">
+                                            <input type="checkbox" ${item.colors?.includes(c) ? 'checked' : ''} onchange="updateColor(${catIdx},${subIdx},${itemIdx},'${c}')" class="hidden">
+                                            <span class="px-2 py-0.5 text-[8px] font-bold rounded border uppercase ${item.colors?.includes(c) ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-300 text-gray-400'}">${c}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>` : ''}
+                            </div>`;
+                    });
+                    catHtml += `</div></div>`;
+                });
+                catHtml += `</div></div>`;
+                container.innerHTML += catHtml;
+            });
+            calculateTotals();
+        }
+
+        // Logic Functions
+        function updateItem(c, s, i, key, val) {
+            if (key === 'p' || key === 'q') val = parseFloat(val) || 0;
+            state.categories[c].subs[s].items[i][key] = val;
+            calculateTotals();
+            saveToLocal();
+        }
+
+        function changeQty(c, s, i, delta) {
+            let current = state.categories[c].subs[s].items[i].q || 0;
+            state.categories[c].subs[s].items[i].q = Math.max(0, current + delta);
+            renderApp();
+            saveToLocal();
+        }
+
+        function updateColor(c, s, i, color) {
+            if (!state.categories[c].subs[s].items[i].colors) state.categories[c].subs[s].items[i].colors = [];
+            const colors = state.categories[c].subs[s].items[i].colors;
+            const index = colors.indexOf(color);
+            if (index > -1) colors.splice(index, 1);
+            else colors.push(color);
+            renderApp();
+            saveToLocal();
+        }
+
+        function addItem(c, s) {
+            state.categories[c].subs[s].items.push({n: "Νέο Υλικό", p: 0, q: 0});
+            renderApp();
+            saveToLocal();
+        }
+
+        function calculateTotals() {
+            let sub = 0;
+            state.categories.forEach(cat => {
+                cat.subs.forEach(subcat => {
+                    subcat.items.forEach(item => {
+                        sub += (item.q || 0) * (item.p || 0);
+                    });
+                });
+            });
+            state.projectName = document.getElementById('projectName').value;
+            state.discount = parseFloat(document.getElementById('globalDiscount').value) || 0;
+            
+            const total = sub * (1 - state.discount / 100);
+            document.getElementById('subTotal').innerText = sub.toFixed(2) + ' €';
+            document.getElementById('grandTotal').innerText = total.toFixed(2) + ' €';
+        }
+
+        function saveToLocal() {
+            localStorage.setItem('elec_state_v11', JSON.stringify(state));
+        }
+
+        function saveToFile() {
+            const blob = new Blob([JSON.stringify(state)], {type: "application/json"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = (state.projectName || "Project") + ".json";
+            a.click();
+        }
+
+        function loadFromFile(event) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state = JSON.parse(e.target.result);
+                renderApp();
+                alert("Το έργο φορτώθηκε επιτυχώς!");
+            };
+            reader.readAsText(event.target.files[0]);
+        }
+
+        function resetAll() {
+            if (confirm("Διαγραφή όλων των δεδομένων;")) {
+                localStorage.removeItem('elec_state_v11');
+                location.reload();
+            }
+        }
+
+        function filterItems() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.item-row').forEach(row => {
+                const name = row.getAttribute('data-name');
+                row.classList.toggle('hidden-item', !name.includes(query));
+            });
+        }
+
+        async function exportToPDF() {
+            const body = document.getElementById('pdf-body');
+            body.innerHTML = '';
+            state.categories.forEach(cat => {
+                cat.subs.forEach(sub => {
+                    sub.items.forEach(item => {
+                        if (item.q > 0) {
+                            let desc = item.n;
+                            if (item.colors && item.colors.length > 0) desc += ` (${item.colors.join(', ')})`;
+                            body.innerHTML += `<tr>
+                                <td>${desc}</td>
+                                <td style="text-align:center">${item.q}</td>
+                                <td style="text-align:right">${item.p.toFixed(2)}€</td>
+                                <td style="text-align:right">${(item.q * item.p).toFixed(2)}€</td>
+                            </tr>`;
+                        }
+                    });
+                });
+            });
+            
+            document.getElementById('pdf-header').innerHTML = `<strong>Έργο:</strong> ${state.projectName} <br> <strong>Ημερομηνία:</strong> ${new Date().toLocaleDateString('el-GR')}`;
+            document.getElementById('pdf-footer').innerHTML = `Σύνολο με έκπτωση ${state.discount}%: ${document.getElementById('grandTotal').innerText}`;
+            
+            const el = document.getElementById('pdf-container');
+            el.style.position = "static";
+            await html2pdf().from(el).set({ margin: 10, filename: state.projectName + '.pdf' }).save();
+            el.style.position = "absolute";
+        }
+
+        init();
+    </script>
+</body>
+</html>
