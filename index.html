@@ -65,12 +65,12 @@
         <div class="container mx-auto">
             <div class="flex justify-between items-end">
                 <div class="space-y-1">
-                    <div class="text-gray-400 text-[10px] uppercase font-bold">Καθαρή Αξία: <span id="subTotal" class="text-gray-600 tracking-tight">0.00 €</span></div>
+                    <div class="text-gray-400 text-[10px] uppercase font-bold">Καθαρή: <span id="subTotal" class="text-gray-600 tracking-tight">0.00 €</span></div>
                     <div class="text-gray-400 text-[10px] uppercase font-bold">Έκπτωση: <span id="discountVal" class="text-red-500">0.00 €</span></div>
                     <div class="text-gray-400 text-[10px] uppercase font-bold">ΦΠΑ: <span id="taxVal" class="text-blue-500">0.00 €</span></div>
                 </div>
                 <div class="text-right">
-                    <div class="text-blue-600 text-[10px] uppercase font-black tracking-widest">Τελικό Πληρωτέο</div>
+                    <div class="text-blue-600 text-[10px] uppercase font-black tracking-widest">ΣΥΝΟΛΟ</div>
                     <div id="grandTotal" class="text-3xl font-black text-slate-900 leading-none">0.00 €</div>
                 </div>
             </div>
@@ -96,34 +96,59 @@
                 {
                     name: "Καλώδια",
                     subs: [
-                        { name: "Πολύκλονα 2x & 3x", hasColor: false, items: [{n:"2x1", p:0.59}, {n:"2x1.5", p:0.85}, {n:"3x1.5", p:1.05}, {n:"3x2.5", p:1.65}, {n:"3x4", p:2.60}, {n:"3x6", p:3.80}] },
-                        { name: "Πολύκλονα 5x", hasColor: false, items: [{n:"5x1.5", p:1.75}, {n:"5x2.5", p:2.75}, {n:"5x4", p:4.20}, {n:"5x6", p:6.10}] },
-                        { name: "Μονόκλωνα (H07V-U)", hasColor: true, items: [{n:"1x1.5mm", p:0.28}, {n:"1x2.5mm", p:0.46}, {n:"1x4mm", p:0.74}, {n:"1x6mm", p:1.10}] },
-                        { name: "Άλλα Καλώδια", hasColor: false, items: [{n:"Καλώδιο TV", p:0.60}, {n:"UTP CAT6", p:0.70}] }
+                        { name: "Πολύκλονα 2x & 3x", hasColor: false, items: [{n:"2x1", p:0.59}, {n:"2x1.5", p:0.85}, {n:"3x1.5", p:1.05}, {n:"3x2.5", p:1.65}, {n:"3x4", p:2.60}, {n:"3x6", p:3.80}, {n:"3x10", p:6.20}, {n:"3x16", p:9.50}] },
+                        { name: "Πολύκλονα 5x", hasColor: false, items: [{n:"5x1", p:1.35}, {n:"5x1.5", p:1.75}, {n:"5x2.5", p:2.75}, {n:"5x4", p:4.20}, {n:"5x6", p:6.10}, {n:"5x10", p:10.20}, {n:"5x16", p:15.80}] },
+                        { name: "Μονόκλωνα (H07V-U)", hasColor: true, items: [{n:"1x1mm", p:0.21}, {n:"1x1.5mm", p:0.28}, {n:"1x2.5mm", p:0.46}, {n:"1x4mm", p:0.74}, {n:"1x6mm", p:1.10}, {n:"1x10mm", p:1.95}, {n:"1x16mm", p:3.10}] },
+                        { name: "Άλλα Καλώδια", hasColor: false, items: [{n:"Καλώδιο TV", p:0.60}, {n:"UTP CAT6", p:0.70}, {n:"Καλώδιο Γείωσης 25mm", p:5.50}, {n:"Χάλκινος Αγωγός Γείωσης", p:22.50}, {n:"Ράβδος Γείωσης Φ14", p:16.70}, {n:"Ράβδος Γείωσης Φ17", p:25.40}, {n:"Ράβδος Γείωσης Φ20", p:22.70}, {n:"Σφιγκτηρας Γείωσης 5/8", p:3.10}, {n:"Σφιγκτηρας Γείωσης 3/4", p:4.00}] }
                     ]
                 },
                 {
                     name: "Σωλήνες & Κανάλια",
                     subs: [
-                        { name: "Σπιράλ", hasColor: false, items: [{n:"Φ16 Ελαφρύ", p:0.35}, {n:"Φ16 Βαρύ", p:0.65}, {n:"Φ20 Ελαφρύ", p:0.45}, {n:"Φ20 Βαρύ", p:0.85}] },
-                        { name: "Σωλήνα Ευθεία", hasColor: false, items: [{n:"Φ16 Ευθεία", p:3.40}, {n:"Φ20 Ευθεία", p:4.10}, {n:"Φ25 Ευθεία", p:6.00}] },
-                        { name: "Μούφες&Κολάρα", hasColor: false, items: [{n:"Φ16 Μούφα", p:0.20}, {n:"Φ16 Κολάρο", p:0.20}, {n:"Φ20 Μούφα", p:0.20}] },
-                        { name: "Κανάλια Λευκά", hasColor: false, items: [{n:"12x12", p:0.95}, {n:"16x16", p:1.15}, {n:"20x13", p:3.60}] }
+                        { name: "Σπιράλ", hasColor: false, items: [{n:"Φ16 Ελαφρύ", p:0.35}, {n:"Φ16 Βαρύ", p:0.65}, {n:"Φ20 Ελαφρύ", p:0.45}, {n:"Φ20 Βαρύ", p:0.85}, {n:"Φ25 Ελαφρύ", p:0.60}, {n:"Φ25 Βαρύ", p:1.15}, {n:"Φ32 Ελαφρύ", p:3.29}, {n:"Φ40 Ελαφρύ", p:0.00}] },
+                        { name: "Σωλήνα Ευθεία", hasColor: false, items: [{n:"Φ16 Ευθεία", p:3.40}, {n:"Φ20 Ευθεία", p:4.10}, {n:"Φ25 Ευθεία", p:6.00}, {n:"Φ32 Ευθεία", p:8.70}, {n:"Φ40 Ευθεία", p:12.20}, {n:"Φ50 Ευθεία", p:16.90}] },
+                        { name: "Μούφες&Κολάρα", hasColor: false, items: [{n:"Φ16 Μούφα", p:0.20}, {n:"Φ16 Κολάρο", p:0.20}, {n:"Φ20 Μούφα", p:0.20}, {n:"Φ20 Κολάρο", p:0.25}, {n:"Φ25 Μούφα", p:0.30}, {n:"Φ25 Κολάρο", p:0.40}, {n:"Φ32 Μούφα", p:0.60}, {n:"Φ32 Κολάρο", p:0.50}, {n:"Φ40 Μούφα", p:1.00}, {n:"Φ40 Κολάρο", p:0.70}, {n:"Φ50 Μούφα", p:1.85}, {n:"Φ50 Κολάρο", p:1.00}] },
+                        { name: "Κανάλια Λευκά", hasColor: false, items: [{n:"12x12", p:0.95}, {n:"16x16", p:1.15}, {n:"20x13", p:3.60}, {n:"25x25", p:3.50}, {n:"25x40", p:2.40}, {n:"40x60", p:4.80}, {n:"Manual", p:0.00}] }
                     ]
                 },
                 {
                     name: "Πίνακες & Υλικό Ράγας",
                     subs: [
-                        { name: "Πίνακες", hasColor: false, items: [{n:"Πίνακας 12 Στοιχ.", p:18.00}, {n:"Πίνακας 24 Στοιχ.", p:32.00}] },
-                        { name: "Ασφάλειες", hasColor: false, items: [{n:"10A", p:3.80}, {n:"16A", p:3.80}, {n:"20A", p:3.90}, {n:"25A", p:4.10}] },
-                        { name: "Ρελέ Διαρροής", hasColor: false, items: [{n:"40A/30mA AC", p:38.00}, {n:"63A/30mA AC", p:66.40}] }
+                        { name: "Πίνακες Χωνευτοί", hasColor: false, items: [{n:"Πίνακας 8 Στοιχ.", p:12.50}, {n:"Πίνακας 12 Στοιχ.", p:18.00}, {n:"Πίνακας 24 Στοιχ.", p:32.00}, {n:"Πίνακας 36 Στοιχ.", p:45.00}, {n:"Πίνακας 48 Στοιχ.", p:65.00}] },
+                        { name: "Πίνακες Εξωτερικοί", hasColor: false, items: [{n:"Πίνακας 8 Στοιχ.", p:13.90}, {n:"Πίνακας 12 Στοιχ.", p:15.65}, {n:"Πίνακας 24 Στοιχ.", p:23.20}, {n:"Πίνακας 36 Στοιχ.", p:31.55}, {n:"Πίνακας 48 Στοιχ.", p:56.80}] },
+                        { name: "Γενικοί Διακόπτες", hasColor: false, items: [{n:"Μονοπολικός 40Α", p:4.70}, {n:"Διπολικός 40Α", p:9.30}, {n:"Τριπολικός 40Α", p:14.30}, {n:"Τετραπολικός 40Α", p:22.90}] },
+                        { name: "Ασφάλειες Μονοπολικές(C)", hasColor: false, items: [{n:"10A", p:3.80}, {n:"16A", p:3.80}, {n:"20A", p:3.90}, {n:"25A", p:4.10}, {n:"32A", p:5.20}, {n:"63A", p:6.80}] },
+                        { name: "Ασφάλειες Διπολικές(C)", hasColor: false, items: [{n:"10A", p:9.60}, {n:"16A", p:9.60}, {n:"20A", p:10.60}, {n:"25A", p:10.60}, {n:"32A", p:11.55}, {n:"63A", p:13.00}] },
+                        { name: "Ασφάλειες Τριπολικές(C)", hasColor: false, items: [{n:"10A", p:14.50}, {n:"16A", p:15.30}, {n:"20A", p:15.30}, {n:"25A", p:15.30}, {n:"32A", p:19.50}] },
+                        { name: "Ασφάλειες Τετραπολικές(C)", hasColor: false, items: [{n:"10A", p:21.90}, {n:"16A", p:21.90}, {n:"20A", p:21.90}, {n:"25A", p:21.90}, {n:"40A", p:40.20}] },
+                        { name: "Ρελέ Διαρροής Διπολικά", hasColor: false, items: [{n:"40A/30mA AC", p:38.00}, {n:"40A/30mA A", p:51.00}, {n:"63A/30mA AC", p:66.40}, {n:"63A/30mA A", p:79.00}] },
+                        { name: "Ρελέ Διαρροής Τετραπολικά", items: [{n:"40A/30mA AC", p:52.40}, {n:"40A/30mA A", p:75.70}, {n:"63A/30mA AC", p:86.00}, {n:"63A/30mA A", p:104.40}] },
+                        { name: "Αντικεραυνικά", hasColor: false, items: [{n:"T2 1P+N 20kA", p:53.00}, {n:"T2 3P+N 20kA", p:94.40}] },
+                        { name: "Λυχνίες & Ράγας", hasColor: false, items: [{n:"Μονοφασική", p:3.40}, {n:"Μονοφασική LED", p:6.50}, {n:"Τριφασική LED", p:13.70}, {n:"Μπάρα 1Φ", p:4.30}, {n:"Μπάρα 3Φ", p:9.70}, {n:"Πρίζα Ράγας", p:8.60}] }
                     ]
                 },
                 {
                     name: "Πριζοδιακοπτικό",
                     subs: [
-                        { name: "Διακόπτες", hasColor: false, items: [{n:"Απλός", p:2.50}, {n:"Κομμυτατέρ", p:3.50}, {n:"Αλλέ-Ρετούρ", p:3.00}] },
-                        { name: "Πρίζες", hasColor: false, items: [{n:"Σούκο Απλή", p:2.40}, {n:"Ethernet", p:14.00}] }
+                        { name: "Διακόπτες", hasColor: false, items: [{n:"Απλός", p:2.50}, {n:"Κομμυτατέρ", p:3.50}, {n:"Αλλέ-Ρετούρ", p:3.00}, {n:"Μεσαίος Αλλέ-Ρετούρ", p:7.20}, {n:"Μεσαίος Διπλός Αλλέ-Ρετούρ", p:7.20}, {n:"Διπλός Αλλέ-Ρετούρ", p:7.20}, {n:"Μπουτόν Up&Down", p:7.20}, {n:"Μπουτόν Μονό", p:4.60}] },
+                        { name: "Πρίζες", hasColor: false, items: [{n:"Σούκο Απλή", p:2.40}, {n:"Σούκο Καπάκι", p:4.50}, {n:"TV Τερματική", p:7.30}, {n:"TV Διελεύσεως", p:7.30}, {n:"Ethernet", p:14.00}] },
+                        { name: "Πλαίσια", hasColor: false, items: [{n:"Πλαίσιο Μονό", p:0.76}, {n:"Πλαίσιο Διπλό", p:1.90}, {n:"Πλαίσιο Τριπλό", p:2.70}, {n:"Πλαίσιο Τετραπλό", p:4.60}] },
+                        { name: "Κουτιά Χωνευτά", hasColor: false, items: [{n:"Μπουάτ Μεγ.", p:0.20}, {n:"Κυτίο Συνδεόμενο", p:0.35}, {n:"Κυτίο Γυψοσανίδας Μονό", p:1.20}, {n:"Κυτίο Γυψοσανίδας Διπλό", p:5.10}, {n:"Κυτίο Γυψοσανίδας Τριπλό", p:7.00}, {n:"Κυτίο Γυψοσανίδας Τετρ.", p:9.40}] },
+                        { name: "Κουτιά Επίτοιχα", hasColor: false, items: [{n:"Εξ. Μπουάτ 67x67", p:1.35}, {n:"Εξ. Μπουάτ 82x82", p:1.75}, {n:"Εξ. Μπουάτ 101x101", p:3.00}] }
+                    ]
+                },
+                {
+                    name: "LED & Φωτισμός",
+                    subs: [
+                        { name: "Λάμπες LED", items: [{n:"9W E27", p:2.50}, {n:"12W E27", p:3.80}, {n:"6W E14 Κερί", p:2.80}, {n:"Ντουι E27", p:1.30}, {n:"Ντουι E14", p:1.00}] },
+                        { name: "Προβολείς & Ταινίες", items: [{n:"Προβολέας 30W", p:18.50}, {n:"Ταινία LED 5m 24V", p:0.00}, {n:"Τροφοδοτικό 24V 60W", p:12.20}, {n:"Τροφοδοτικό 24V 100W", p:17.20}, {n:"Τροφοδοτικό 24V 150W", p:19.60}, {n:"Τροφοδοτικό 24V 200W", p:26.00}, {n:"Τροφοδοτικό 24V 250W", p:28.50}, {n:"Τροφοδοτικό 24V Στεγανό IP67 60W", p:17.70}, {n:"Τροφοδοτικό 24V Στεγανό IP67 100W", p:23.40}, {n:"Τροφοδοτικό 24V Στεγανό IP67 150W", p:30.40}, {n:"Τροφοδοτικό 24V Στεγανό IP67 200W", p:33.80}] }
+                    ]
+                },
+                {
+                    name: "Εξτρα Αναλώσιμα",
+                    subs: [
+                        { name: "Ηλεκτρολογικά", items: [{n:"Καπάκια Μπουάτ", p:0.30}, {n:"Κλέμμες 6mm", p:1.75}, {n:"Κλέμμες 10mm", p:2.50}, {n:"Ταχυκλέμμες 2x", p:0.35}, {n:"Ταχυκλέμμες 3x", p:0.42}, {n:"Ταχυκλέμμες 5x", p:0.70}, {n:"Μονωτική Ταινία", p:0.75}, {n:"Μονωτική Ταινία Φαρδιά", p:1.50}, {n:"Δεματικά", p:0.00}, {n:"Σύνδεσμοι Καλωδίων", p:0.00}, {n:"Ακροχιτώνια Μονά", p:0.00}, {n:"Ακροχιτώνια Διπλά", p:0.00}, {n:"Μπαταρίες", p:0.00}, {n:"Σιλικόνη", p:0.00}, {n:"Βύσματα RJ45", p:0.45}] },
+                        { name: "Λοιπά", items: [{n:"Βύσματα 6mm", p:1.90}, {n:"Βίδες 4x50", p:5.00}, {n:"Βίδες 5x50", p:5.00}, {n:"Γυψοσοβάς MP75L", p:7.80}, {n:"Σύρμα", p:0.00}] }
                     ]
                 }
             ]
@@ -135,8 +160,7 @@
             renderApp();
         }
 
-        function renderApp() {
-            document.getElementById('projectName').value = state.projectName || "";
+        function renderApp() {document.getElementById('projectName').value = state.projectName || "";
             document.getElementById('globalDiscount').value = state.discount || 0;
             document.getElementById('taxRate').value = state.tax ?? 24;
             
@@ -163,16 +187,12 @@
                         catHtml += `
                             <div class="item-row p-3 rounded-xl border ${hasQty ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100 bg-gray-50/50'} transition-all" data-name="${item.n.toLowerCase()}">
                                 <div class="flex flex-col gap-3">
-                                    <div class="flex items-start">
-                                        <input type="text" value="${item.n}" oninput="updateItem(${catIdx},${subIdx},${itemIdx},'n',this.value)" class="flex-grow text-sm font-bold bg-transparent outline-none">
-                                    </div>
-                                    
+                                    <input type="text" value="${item.n}" oninput="updateItem(${catIdx},${subIdx},${itemIdx},'n',this.value)" class="w-full text-sm font-bold bg-transparent outline-none">
                                     <div class="flex items-center justify-between gap-4">
                                         <div class="flex items-center gap-1">
                                             <span class="text-[10px] font-bold text-gray-400">€</span>
                                             <input type="number" step="0.01" value="${item.p}" oninput="updateItem(${catIdx},${subIdx},${itemIdx},'p',this.value)" class="w-16 text-sm font-medium bg-white border rounded-md p-1">
                                         </div>
-
                                         <div class="flex items-center bg-white border border-slate-200 rounded-lg shadow-sm">
                                             <button onclick="changeQty(${catIdx},${subIdx},${itemIdx},-1)" class="w-10 h-10 text-blue-600 font-bold text-xl">-</button>
                                             <input type="number" value="${item.q || 0}" 
@@ -201,6 +221,7 @@
                 container.innerHTML += catHtml;
             });
             calculateTotals();
+            filterItems();
         }
 
         function updateItem(c, s, i, key, val) {
@@ -284,12 +305,36 @@
         }
 
         function filterItems() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.item-row').forEach(row => {
-                const name = row.getAttribute('data-name');
-                row.classList.toggle('hidden-item', !name.includes(query));
-            });
+    const query = document.getElementById('searchInput').value.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Αφαίρεση τόνων από την αναζήτηση
+        
+    const categories = document.querySelectorAll('.cat-card');
+
+    categories.forEach(cat => {
+        let catHasVisibleItems = false;
+        const rows = cat.querySelectorAll('.item-row');
+
+        rows.forEach(row => {
+            const nameInput = row.querySelector('input[type="text"]');
+            if (nameInput) {
+                const itemName = nameInput.value.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Αφαίρεση τόνων από το υλικό
+                
+                const isMatch = itemName.includes(query);
+                row.classList.toggle('hidden-item', !isMatch);
+                
+                if (isMatch) catHasVisibleItems = true;
+            }
+        });
+
+        // Κρύψε ολόκληρη την κάρτα της κατηγορίας αν δεν έχει κανένα αποτέλεσμα
+        if (catHasVisibleItems || query === "") {
+            cat.style.display = "block";
+        } else {
+            cat.style.display = "none";
         }
+    });
+}
 
         async function exportToPDF() {
             const body = document.getElementById('pdf-body');
@@ -303,34 +348,20 @@
                             if (item.colors?.length > 0) desc += ` (${item.colors.join(', ')})`;
                             const rowTotal = item.q * item.p;
                             sub += rowTotal;
-                            body.innerHTML += `<tr>
-                                <td>${desc}</td>
-                                <td style="text-align:center">${item.q}</td>
-                                <td style="text-align:right">${item.p.toFixed(2)}€</td>
-                                <td style="text-align:right">${rowTotal.toFixed(2)}€</td>
-                            </tr>`;
+                            body.innerHTML += `<tr><td>${desc}</td><td style="text-align:center">${item.q}</td><td style="text-align:right">${item.p.toFixed(2)}€</td><td style="text-align:right">${rowTotal.toFixed(2)}€</td></tr>`;
                         }
                     });
                 });
             });
-
             const afterDiscount = sub * (1 - state.discount / 100);
             const taxAmount = afterDiscount * (state.tax / 100);
-
             document.getElementById('pdf-header').innerHTML = `<strong>Έργο:</strong> ${state.projectName} | <strong>Ημερομηνία:</strong> ${new Date().toLocaleDateString('el-GR')}`;
-            document.getElementById('pdf-footer').innerHTML = `
-                Αρχικό Σύνολο: ${sub.toFixed(2)}€<br>
-                Έκπτωση ${state.discount}%: -${(sub - afterDiscount).toFixed(2)}€<br>
-                ΦΠΑ ${state.tax}%: ${taxAmount.toFixed(2)}€<br>
-                <span style="font-size:20px; color:#2563eb">Τελικό Σύνολο: ${(afterDiscount + taxAmount).toFixed(2)}€</span>
-            `;
-            
+            document.getElementById('pdf-footer').innerHTML = `Αρχικό: ${sub.toFixed(2)}€<br>Έκπτωση ${state.discount}%: -${(sub - afterDiscount).toFixed(2)}€<br>ΦΠΑ ${state.tax}%: ${taxAmount.toFixed(2)}€<br><span style="font-size:20px; color:#2563eb">Σύνολο: ${(afterDiscount + taxAmount).toFixed(2)}€</span>`;
             const el = document.getElementById('pdf-container');
             el.style.position = "static";
             await html2pdf().from(el).set({ margin: 10, filename: state.projectName + '.pdf', html2canvas: { scale: 2 } }).save();
             el.style.position = "absolute";
         }
-
         init();
     </script>
 </body>
