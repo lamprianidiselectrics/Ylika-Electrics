@@ -54,9 +54,12 @@
             </div>
         </div>
 
-        <div class="mb-6 sticky top-20 z-30">
-            <input type="text" id="searchInput" oninput="filterItems()" placeholder="🔍 Αναζήτηση υλικού..." class="w-full p-4 rounded-2xl border-none shadow-lg outline-none focus:ring-2 focus:ring-blue-500 text-base">
-        </div>
+        <div class="mb-6 sticky top-20 z-30 flex gap-2">
+			<input type="text" id="searchInput" oninput="filterItems()" placeholder="🔍 Αναζήτηση ή φωνητική εντολή..." class="flex-1 p-4 rounded-2xl border-none shadow-lg outline-none focus:ring-2 focus:ring-blue-500 text-base">
+			<button onclick="startVoiceSearch()" id="micBtn" class="bg-white p-4 rounded-2xl shadow-lg hover:bg-gray-50 active:scale-95 transition-all text-xl">
+			🎤
+			</button>
+		</div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="appContent"></div>
     </main>
