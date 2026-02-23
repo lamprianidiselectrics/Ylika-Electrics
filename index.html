@@ -209,7 +209,7 @@
                                 </div>
                                 ${sub.hasColor ? `
                                 <div class="flex gap-1.5 mt-3 pt-3 border-t border-gray-200/50">
-                                    ${['Καφέ','Μπλε','Μαυρο','Κ/Π'].map(c => `
+                                    ${['Καφέ','Μπλε','Μαυρο','Κ/Π','Κόκκινο','Γκρι','Λευκό'].map(c => `
                                         <label class="flex-1">
                                             <input type="checkbox" ${item.colors?.includes(c) ? 'checked' : ''} onchange="updateColor(${catIdx},${subIdx},${itemIdx},'${c}')" class="hidden">
                                             <span class="block text-center py-1.5 text-[9px] font-bold rounded-md border uppercase transition-all ${item.colors?.includes(c) ? 'bg-blue-600 text-white border-blue-600 shadow-md' : 'bg-white border-gray-200 text-gray-400'}">${c}</span>
@@ -438,4 +438,3 @@
     </script>
 </body>
 </html>
-
